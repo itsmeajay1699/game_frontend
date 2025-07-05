@@ -18,7 +18,7 @@ export default function HomePage() {
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
-      className="min-h-screen text-white"
+      className="min-h-screen text-white pb-10 relative"
     >
       <LogoHeader />
 
