@@ -3,6 +3,7 @@ import RegisterPage from "@/features/auth/pages/RegisterPage";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import ProtectedRoute from "@/components/protectedRoute";
 import HomePage from "@/features/game/pages/HomePage";
+import TransactionsPage from "@/features/transaction/pages/TransactionPage";
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,14 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <HomePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/transactions",
+    element: (
+      <ProtectedRoute>
+        <TransactionsPage />
       </ProtectedRoute>
     ),
   },

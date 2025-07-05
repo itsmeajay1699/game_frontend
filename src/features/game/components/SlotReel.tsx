@@ -62,6 +62,7 @@ export default function ReelDisplay() {
   const [selectedBid, setSelectedBid] = useState<number | null>(null);
   const { balance, isLoading, setBalance } = useAppContext();
   const [isWin, setIsWin] = useState(false);
+  const [winAmount, setWinAmount] = useState<number | null>(null);
 
   const spinReel = async (
     ref: React.RefObject<HTMLDivElement | null>,
@@ -129,6 +130,7 @@ export default function ReelDisplay() {
           setIsWin(true);
           setSelectedBid(null); // reset selected bid after win
           setBalance(updatedBalance); // final balance update from the backend
+          setWinAmount(updatedBalance - balance); // calculate win amount
           toastSuccess("Congratulations! You won!", {
             description: `You won ₹${
               updatedBalance - balance
@@ -153,7 +155,7 @@ export default function ReelDisplay() {
     <>
       {isWin && (
         <WinningModal
-          winAmount={100}
+          winAmount={winAmount ?? 0}
           onClose={() => {
             setIsWin(false);
           }}
