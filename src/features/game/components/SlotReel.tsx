@@ -237,7 +237,7 @@ export default function ReelDisplay() {
             }
           );
 
-          const { reels, result, updatedBalance, winAmount } = res.data;
+          const { reels, result, updatedBalance } = res.data;
           const finalIndices = reels.map((reel: any) => reel.index);
           handleSpin({
             index: finalIndices,
