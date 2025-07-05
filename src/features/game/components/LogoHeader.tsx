@@ -1,29 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import axiosClient from "@/lib/axios";
-import { useEffect, useState } from "react";
 import MaxContainer from "@/components/shared/maxContainer";
+import { useAppContext } from "@/context/AppContext";
 
 export default function LogoHeader() {
-  const [balance, setBalance] = useState<number>(0);
-
-  const { data, isLoading } = useQuery({
-    queryKey: ["balance"],
-    queryFn: async () => {
-      const res = await axiosClient.get("/balance", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      return res.data;
-    },
-  });
-
-  useEffect(() => {
-    if (data?.balance !== undefined) {
-      setBalance(data.balance);
-    }
-  }, [data]);
+  const { balance, isLoading } = useAppContext();
 
   return (
     <header className="fixed w-full text-white py-4 shadow-md">
