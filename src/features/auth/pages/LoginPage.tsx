@@ -29,7 +29,7 @@ export default function LoginPage() {
 
       localStorage.setItem("token", res.token || "");
       // Redirect to home page after successful registration
-      navigate("/home");
+      navigate("/");
     } catch (err: any) {
       const errorMessage =
         err?.response?.data?.message || "Invalid credentials";
