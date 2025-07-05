@@ -29,7 +29,7 @@ export default function HomePage() {
           </div>
 
           <div
-            className="backdrop-blur-md bg-white/10 border border-white/20 shadow-2xl rounded-2xl ring-1 ring-yellow-400/30
+            className="backdrop-blur-md mx-auto bg-white/10 border border-white/20 shadow-2xl rounded-2xl ring-1 ring-yellow-400/30
                         after:content-[''] after:absolute after:inset-0 after:rounded-2xl after:pointer-events-none
                         after:ring-8 after:ring-yellow-400/10"
           >
