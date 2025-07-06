@@ -95,8 +95,8 @@ Each symbol has:
 export const ReelOne: Symbol[] = [
   { id: "cherry",     weight:  8, payout:  8, index: 0 },
   { id: "orange",     weight: 40, payout:  2, index: 4 },
-  { id: "watermelon", weight: 30, payout:  3, index: 5 },
-  { id: "ring",       weight: 15, payout:  5, index: 1 },
+  { id: "watermelon", weight: 30, payout:  4, index: 5 },
+  { id: "ring",       weight: 15, payout:  6, index: 1 },
   { id: "seven",      weight:  5, payout: 10, index: 3 },
   { id: "joker",      weight:  2, payout: 20, index: 2 },
 ];
@@ -131,14 +131,40 @@ Payout formula
 payout = wagerAmount * symbol.payout;
 
 
-Two matching symbols → partial win (to be implemented).
+🧮 Partial Win Payout Logic
+In case of a partial win (i.e., when 2 out of 3 symbols match), the user receives a reduced payout.
+
+The logic is as follows:
+
+Base Formula:
+partialWinAmount = wagerAmount × (payout / 2)
+
+Payout Cap:
+The partial win amount is capped at ₹(wagerAmount + 10) to avoid disproportionately high rewards for partial matches.
+
+Example:
+If a user wagers ₹100 and the symbol's full payout is 10×:
+
+Full Win: ₹100 × 10 = ₹1000
+
+Partial Win (before cap): ₹100 × (10 / 2) = ₹500
+
+Final Partial Win: min(500, 100 + 10) → ₹110
+
+So the user receives ₹110 as a partial win.
+
+This keeps the experience rewarding without overpaying for near-misses.
 
 No match → player loses wager.
 
 Example
-Wager	Matching Symbol	Multiplier	Total Win
-₹30	ring	5×	₹150
+Wager	Matching Symbol	Multiplier	Total Win For 3 Matches
+₹30	ring	6×	₹180
 ₹10	joker	20×	₹200
+
+Wager	Partial Match	Partial Win
+₹30	ring	6×	₹40
+₹10	joker	20×	₹20
 
 
 ```
