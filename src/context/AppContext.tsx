@@ -16,27 +16,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [balance, setBalance] = useState<number>(0);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["balance"],
-    queryFn: async () => {
-      const res = await axiosClient.get("/balance", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      return res.data;
-    },
-  });
-
-  useEffect(() => {
-    if (data?.balance !== undefined) {
-      setBalance(data.balance);
-    }
-  }, [data]);
-
   return (
-    <AppContext.Provider value={{ balance, setBalance, isLoading }}>
+    <AppContext.Provider value={{ balance, setBalance }}>
       {children}
     </AppContext.Provider>
   );

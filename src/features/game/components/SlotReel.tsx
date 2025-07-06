@@ -60,7 +60,7 @@ export default function ReelDisplay() {
   const reel2Ref = useRef<HTMLDivElement>(null);
   const reel3Ref = useRef<HTMLDivElement>(null);
   const [selectedBid, setSelectedBid] = useState<number | null>(null);
-  const { balance, isLoading, setBalance } = useAppContext();
+  const { balance, setBalance } = useAppContext();
   const [isWin, setIsWin] = useState(false);
   const [winAmount, setWinAmount] = useState<number | null>(null);
 
@@ -106,14 +106,7 @@ export default function ReelDisplay() {
         throw new Error("Please select a bid amount before spinning.");
       }
 
-      if (isLoading) {
-        throw new Error("Loading, please wait.");
-      }
-
-      if (balance < selectedBid) {
-        throw new Error("Insufficient balance to place this bid.");
-      }
-
+      console.log(balance);
       // just for the user ui backend will update accordingly
       setBalance(balance - selectedBid);
 
@@ -226,24 +219,37 @@ export default function ReelDisplay() {
         className="mt-6 bg-[#4FF55F] text-[#121212] font-bold px-10 py-4 text-lg mx-auto flex"
         disabled={selectedBid === null}
         onClick={async () => {
-          const res = await axiosClient.post(
-            "/slots/spin",
-            { wagerAmount: selectedBid },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
+          try {
+            if (balance < selectedBid!) {
+              throw new Error("Insufficient balance to place this bid.");
             }
-          );
+            const res = await axiosClient.post(
+              "/slots/spin",
+              { wagerAmount: selectedBid },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            );
 
-          const { reels, result, updatedBalance } = res.data;
-          const finalIndices = reels.map((reel: any) => reel.index);
-          handleSpin({
-            index: finalIndices,
-            isWin: result === "win",
-            updatedBalance: updatedBalance,
-          });
+            const { reels, result, updatedBalance } = res.data;
+            const finalIndices = reels.map((reel: any) => reel.index);
+            handleSpin({
+              index: finalIndices,
+              isWin: result === "win",
+              updatedBalance: updatedBalance,
+            });
+          } catch (error) {
+            const errorMessage =
+              error instanceof Error ? error.message : "An error occurred";
+            toastError(errorMessage, {
+              description: "Please try again later.",
+              duration: 3000,
+              position: "top-right",
+            });
+          }
         }}
       >
         Spin Now
