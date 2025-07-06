@@ -70,6 +70,8 @@ Spin → see result → balance updates → transaction saved
 
 6. Features in progress:
 - 🏆 Leaderboard with real users + fake filler names
+      Leaderboard caches for 2 minutes (auto-invalidates) filled with fake data if no real data exists
+      Currently, Leaderboard shows the top 10 winners in the last N days (default 7) not the net wins rather than the total amount won because net wins are in negative for the majority of the users...
 - 🔄 Spin animation based on index returned by backend
 - 🔒 Protected routes using custom `ProtectedRoute` wrapper
 ```
