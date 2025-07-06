@@ -1,7 +1,4 @@
-// src/context/BalanceContext.tsx
-import axiosClient from "@/lib/axios";
-import { useQuery } from "@tanstack/react-query";
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 
 interface AppContextType {
   balance: number;
