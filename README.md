@@ -1,10 +1,6 @@
----
-### ✅ Here's your `frontend/README.md`:
-
 # 🎰 Casino Slot Game – Frontend (React + Vite)
 
-This is the frontend for the Casino Slot Game built with React, Tailwind, ShadCN UI, and TanStack Query.
----
+## This is the frontend for the Casino Slot Game built with React, Tailwind, ShadCN UI, and TanStack Query.
 
 ## ✅ Features
 
