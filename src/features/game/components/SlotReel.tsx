@@ -9,7 +9,7 @@ import { useAppContext } from "@/context/AppContext";
 import axiosClient from "@/lib/axios";
 import { toastError, toastSuccess } from "@/lib/toast";
 import { useRef, useState } from "react";
-import WinningModal from "./WinningModal";
+import ShowPlayModal from "./ShowPlayModal";
 
 const reel1 = [
   cherryImage,
@@ -61,7 +61,7 @@ export default function ReelDisplay() {
   const reel3Ref = useRef<HTMLDivElement>(null);
   const [selectedBid, setSelectedBid] = useState<number | null>(null);
   const { balance, setBalance } = useAppContext();
-  const [isWin, setIsWin] = useState(false);
+  const [isWin, setIsWin] = useState<string>("lose");
   const [winAmount, setWinAmount] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -94,11 +94,11 @@ export default function ReelDisplay() {
 
   const handleSpin = ({
     index,
-    isWin,
+    playStatus,
     updatedBalance = 0,
   }: {
     index: number[];
-    isWin: boolean;
+    playStatus: string;
     updatedBalance?: number;
   }) => {
     try {
@@ -121,14 +121,14 @@ export default function ReelDisplay() {
 
       spinReel(reel3Ref, finalIndex3, 3500);
       setTimeout(() => {
-        if (isWin) {
-          setIsWin(true);
+        if (playStatus === "partial" || playStatus === "win") {
+          setIsWin(playStatus);
           setSelectedBid(null); // reset selected bid after win
           setBalance(updatedBalance); // final balance update from the backend
-          setWinAmount(updatedBalance - balance); // calculate win amount
+          setWinAmount(updatedBalance - balance + selectedBid); // calculate win amount
           toastSuccess("Congratulations! You won!", {
             description: `You won ₹${
-              updatedBalance - balance
+              updatedBalance - balance + selectedBid
             } and your new balance is ₹${updatedBalance}.`,
             duration: 3000,
             position: "top-right",
@@ -150,11 +150,13 @@ export default function ReelDisplay() {
 
   return (
     <>
-      {isWin && (
-        <WinningModal
-          winAmount={winAmount ?? 0}
+      {isWin !== "lose" && (
+        <ShowPlayModal
+          winAmount={winAmount!}
+          status={isWin}
           onClose={() => {
-            setIsWin(false);
+            setIsWin("lose");
+            setWinAmount(null);
           }}
         />
       )}
@@ -246,7 +248,8 @@ export default function ReelDisplay() {
             const finalIndices = reels.map((reel: any) => reel.index);
             handleSpin({
               index: finalIndices,
-              isWin: result === "win",
+              // isWin: result === "win",
+              playStatus: result,
               updatedBalance: updatedBalance,
             });
           } catch (error) {
