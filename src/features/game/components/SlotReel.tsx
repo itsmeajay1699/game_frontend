@@ -10,7 +10,6 @@ import axiosClient from "@/lib/axios";
 import { toastError, toastSuccess } from "@/lib/toast";
 import { useRef, useState } from "react";
 import WinningModal from "./WinningModal";
-import { set } from "date-fns";
 
 const reel1 = [
   cherryImage,
