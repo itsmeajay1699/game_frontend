@@ -46,7 +46,7 @@ export default function RegisterPage() {
       <div className="w-full md:w-1/2 flex justify-center items-center p-8">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="w-full max-w-md space-y-6"
+          className="w-full max-w-md space-y-4"
         >
           <h2 className="text-3xl font-bold text-center">
             Create Your Account
@@ -85,6 +85,14 @@ export default function RegisterPage() {
           >
             {isPending ? "Registering..." : "Register"}
           </Button>
+          <div className="text-center">
+            <p className="text-sm">
+              Already have an account?{" "}
+              <a href="/login" className="text-blue-500 hover:underline">
+                Login here
+              </a>
+            </p>
+          </div>
         </form>
       </div>
     </AuthLayout>
