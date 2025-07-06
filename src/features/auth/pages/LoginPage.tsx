@@ -44,7 +44,7 @@ export default function LoginPage() {
       <div className="w-full md:w-1/2 flex justify-center items-center p-8">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="w-full max-w-md space-y-6"
+          className="w-full max-w-md space-y-4"
         >
           <h2 className="text-3xl font-bold text-center">Login to Play</h2>
 
@@ -81,6 +81,14 @@ export default function LoginPage() {
           >
             {isPending ? "Logging in..." : "Login"}
           </Button>
+          <div className="text-center">
+            <p className="text-sm">
+              Don't have an account?{" "}
+              <a href="/register" className="text-blue-500 hover:underline">
+                Register here
+              </a>
+            </p>
+          </div>
         </form>
       </div>
     </AuthLayout>
