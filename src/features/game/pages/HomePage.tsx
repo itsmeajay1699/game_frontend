@@ -33,7 +33,7 @@ export default function HomePage() {
                         after:content-[''] after:absolute after:inset-0 after:rounded-2xl after:pointer-events-none
                         after:ring-8 after:ring-yellow-400/10"
           >
-            {/* <Leaderboard /> */}
+            <Leaderboard />
           </div>
         </div>
       </MaxContainer>
