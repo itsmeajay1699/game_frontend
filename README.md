@@ -73,3 +73,70 @@ Spin → see result → balance updates → transaction saved
 - 🔄 Spin animation based on index returned by backend
 - 🔒 Protected routes using custom `ProtectedRoute` wrapper
 ```
+
+## 💸 Payout Logic
+
+This slot machine uses a **weighted symbol system** to simulate spin outcomes and determine player payouts.
+
+---
+
+### 🧩 Symbol Setup
+
+Each symbol has:
+
+- **`id`** – unique identifier (e.g., `"cherry"`, `"joker"`)
+- **`weight`** – probability of appearing (higher weight ⇒ more common)
+- **`payout`** – multiplier applied to the wager on a 3-symbol match
+- **`index`** – position used by the frontend animation
+
+```typescript
+export const ReelOne: Symbol[] = [
+  { id: "cherry",     weight:  8, payout:  8, index: 0 },
+  { id: "orange",     weight: 40, payout:  2, index: 4 },
+  { id: "watermelon", weight: 30, payout:  3, index: 5 },
+  { id: "ring",       weight: 15, payout:  5, index: 1 },
+  { id: "seven",      weight:  5, payout: 10, index: 3 },
+  { id: "joker",      weight:  2, payout: 20, index: 2 },
+];
+
+🎯 Weighted Random Symbol Selection
+Symbols are chosen with a weighted-random algorithm:
+
+export function getWeightedSymbol(symbols: Symbol[]): Symbol {
+  const totalWeight = symbols.reduce((sum, sym) => sum + sym.weight, 0);
+  const rand = Math.random() * totalWeight;
+
+  let cumulative = 0;
+  for (const symbol of symbols) {
+    cumulative += symbol.weight;
+    if (rand < cumulative) return symbol;
+  }
+
+  throw new Error("No symbol selected – check weights");
+}
+
+
+Higher weight ⇒ more likely to appear.
+
+Lower weight ⇒ rarer but offers higher payouts.
+
+💰 Payout Rules
+Three matching symbols → player wins.
+
+Payout formula
+
+
+payout = wagerAmount * symbol.payout;
+
+
+Two matching symbols → partial win (to be implemented).
+
+No match → player loses wager.
+
+Example
+Wager	Matching Symbol	Multiplier	Total Win
+₹30	ring	5×	₹150
+₹10	joker	20×	₹200
+
+
+```
