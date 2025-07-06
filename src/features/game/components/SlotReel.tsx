@@ -10,6 +10,7 @@ import axiosClient from "@/lib/axios";
 import { toastError, toastSuccess } from "@/lib/toast";
 import { useRef, useState } from "react";
 import WinningModal from "./WinningModal";
+import { set } from "date-fns";
 
 const reel1 = [
   cherryImage,
@@ -63,6 +64,7 @@ export default function ReelDisplay() {
   const { balance, setBalance } = useAppContext();
   const [isWin, setIsWin] = useState(false);
   const [winAmount, setWinAmount] = useState<number | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const spinReel = async (
     ref: React.RefObject<HTMLDivElement | null>,
@@ -103,6 +105,7 @@ export default function ReelDisplay() {
     try {
       console.log("Spinning reels with indices:", index);
       if (selectedBid === null) {
+        setIsPlaying(false);
         throw new Error("Please select a bid amount before spinning.");
       }
 
@@ -132,8 +135,10 @@ export default function ReelDisplay() {
             position: "top-right",
           });
         }
+        setIsPlaying(false);
       }, 3500);
     } catch (error) {
+      setIsPlaying(false);
       const errorMessage =
         error instanceof Error ? error.message : "An error occurred";
       toastError(errorMessage, {
@@ -203,6 +208,7 @@ export default function ReelDisplay() {
         {BID_AMOUNTS.map((amount) => (
           <Button
             key={amount}
+            disabled={isPlaying}
             onClick={() => setSelectedBid(amount)}
             className={`${
               selectedBid === amount
@@ -217,10 +223,13 @@ export default function ReelDisplay() {
 
       <Button
         className="mt-6 bg-[#4FF55F] text-[#121212] font-bold px-10 py-4 text-lg mx-auto flex"
-        disabled={selectedBid === null}
+        disabled={isPlaying || selectedBid === null}
         onClick={async () => {
           try {
+            setIsPlaying(true);
+
             if (balance < selectedBid!) {
+              setIsPlaying(false);
               throw new Error("Insufficient balance to place this bid.");
             }
             const res = await axiosClient.post(
@@ -242,6 +251,7 @@ export default function ReelDisplay() {
               updatedBalance: updatedBalance,
             });
           } catch (error) {
+            setIsPlaying(false);
             const errorMessage =
               error instanceof Error ? error.message : "An error occurred";
             toastError(errorMessage, {
