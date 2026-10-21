@@ -142,3 +142,4 @@ Wager	Matching Symbol	Multiplier	Total Win
 
 
 ```
+Testing the Vizitor work-intelligence GitHub connector WI-1
